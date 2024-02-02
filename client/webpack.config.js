@@ -1,8 +1,9 @@
-// webpack.config.js
 const path = require('path');
 
+/** @type {import("webpack").Configuration} */
 module.exports = {
   entry: './src/index.js',
+  mode: "development",
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -24,9 +25,6 @@ module.exports = {
     ],
   },
   devServer: {
-    static: {
-      directory: path.join(__dirname, 'dist'),
-    },
     port: 3000,
     historyApiFallback: true,
   },
