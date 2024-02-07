@@ -1,18 +1,16 @@
 // src/components/Login.js
 import React, { useState, useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { storeToken } from '../actions';
 import './Login.css';
-import Dashboard from './Dashboard';
 
-const Login = () => {
+const Login = ({ storeToken, token }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
     if (token) {
       navigate('/dashboard');
     }
@@ -46,7 +44,9 @@ const Login = () => {
           setError('Login failed. Please check your information and try again.');
         }
         else {
+          console.log(token)
           localStorage.setItem('token', token);
+          storeToken(token);
           navigate('/');
         }
     } catch(error) {
@@ -92,4 +92,12 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state) => ({
+  token: state.counter.token
+});
+
+const mapDispatchToProps = {
+  storeToken
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

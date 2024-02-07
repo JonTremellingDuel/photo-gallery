@@ -1,18 +1,19 @@
 // src/components/Logout.js
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { clearToken } from '../actions';
 
-const Logout = () => {
+const Logout = ({clearToken}) => {
   const navigate = useNavigate();
 
   useEffect(() => {
     try {
-      localStorage.clear();
+      clearToken()
       navigate('/login');
     } catch(error) {
         // Handle errors
         console.error('There was a problem with the fetch operation:', error);
-        setError('Login failed. Please check your information and try again.');
     };
   }, [navigate]);
 
@@ -23,4 +24,12 @@ const Logout = () => {
   );
 };
 
-export default Logout;
+const mapStateToProps = (state) => ({
+  token: state.counter.token
+});
+
+const mapDispatchToProps = {
+  clearToken
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Logout);

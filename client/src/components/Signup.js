@@ -1,6 +1,7 @@
 // src/components/Signup.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
 import './Signup.css';
 
 const Signup = () => {
@@ -92,4 +93,8 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+const mapStateToProps = (state) => ({
+  token: state.counter.token
+});
+
+export default connect(mapStateToProps, {})(Signup);

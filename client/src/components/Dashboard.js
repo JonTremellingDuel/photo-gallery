@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import './Dashboard.css';
 
-const Dashboard = () => {
+const Dashboard = ({ token }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
@@ -16,7 +17,7 @@ const Dashboard = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'authorization': `bearer ${localStorage.getItem( 'token' )}`,
+          'authorization': `bearer ${token}`,
         },
       };
 
@@ -56,4 +57,8 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+const mapStateToProps = (state) => ({
+  token: state.counter.token
+});
+
+export default connect(mapStateToProps, {})(Dashboard);

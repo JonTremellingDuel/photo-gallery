@@ -21,7 +21,7 @@ module.exports = env => {
       publicPath: "/",
       clean: !isDevelopment && { keep: /\.ico$/i }
     },
-    devtool: "source-map",
+    devtool: "inline-source-map",
     externalsPresets: {
       web: true,
     },
