@@ -60,14 +60,19 @@ const logout = (req, res) => {
 };
 
 const requireAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
+  // Get the auth header value (bearer token)
+  const bearerHeader = req.headers['authorization'];
+
   if (typeof bearerHeader !== 'undefined') {
+    // Split the header value to get the token
+    const bearerToken = bearerHeader.split(' ')[1];
+
+    // Set the token in the request object
+    req.token = bearerToken;
 
     // Verify the token
     jwt.verify(bearerToken, 'your-secret-key', (err, authData) => {
       if (err) {
-        console.log(err.message);
-        res.redirect('/login');
         res.status(403).json({ message: 'Forbidden' });
       } else {
         // Set the user ID in the request object
@@ -76,8 +81,8 @@ const requireAuth = (req, res, next) => {
       }
     });
   } else {
-    res.redirect('/login');
     // If the token is not provided, return Forbidden
+    res.status(403).json({ message: 'Forbidden' });
   }
 };
 
