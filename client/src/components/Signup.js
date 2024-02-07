@@ -1,11 +1,10 @@
 // src/components/Signup.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './Signup.css';
 
 const Signup = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
 
@@ -16,14 +15,35 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post('http://localhost:5050/api/auth/signup', formData, { withCredentials: true });
-      console.log('Signup successful:', response.data);
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('Signup failed:', error.response.data.errors);
-      setError('Unable to create an account. Please check your information and try again.');
-    }
+    const url = 'http://localhost:5050/api/auth/signup';
+    
+    // Fetch options
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    };
+      
+    // Fetch request
+    fetch(url, options)
+      .then(response => {
+        // Check if response is ok (status in the range 200-299)
+        if (!response.ok) {
+          console.log('Network response was not ok');
+          setError('Unable to create an account. Please check your information and try again.');
+        }
+      })
+      .then(data => {
+        console.log('Signup successful:', data);
+        navigate('/');
+      })
+      .catch(error => {
+        // Handle errors
+        console.error('There was a problem with the fetch operation:', error);
+        setError('Unable to create an account. Please check your information and try again.');
+      });
   };
 
   return (

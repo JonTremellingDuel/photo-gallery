@@ -25,11 +25,12 @@ const createToken = (id) => {
 
 const signup = async (req, res) => {
   try {
-    console.log(req.body)
     const user = await User.create(req.body);
     const token = createToken(user._id);
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.status(201).json({ user: user._id });
+    res.status(201).json({ 
+      user: user._id,
+      token,
+    });
   } catch (err) {
     const errors = handleErrors(err);
     res.status(400).json({ errors });
@@ -42,8 +43,10 @@ const login = async (req, res) => {
   try {
     const user = await User.login(email, password);
     const token = createToken(user._id);
-    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.status(200).json({ user: user._id });
+    res.status(201).json({ 
+      user: user._id,
+      token,
+    });
   } catch (err) {
     const errors = handleErrors(err);
     res.status(400).json({ errors });
@@ -58,26 +61,29 @@ const logout = (req, res) => {
 
 const requireAuth = (req, res, next) => {
   const token = req.cookies.jwt;
+  if (typeof bearerHeader !== 'undefined') {
 
-  // Check if jwt exists and is verified
-  if (token) {
-    jwt.verify(token, 'your-secret-key', (err, decodedToken) => {
+    // Verify the token
+    jwt.verify(bearerToken, 'your-secret-key', (err, authData) => {
       if (err) {
         console.log(err.message);
         res.redirect('/login');
+        res.status(403).json({ message: 'Forbidden' });
       } else {
-        req.user = decodedToken;
+        // Set the user ID in the request object
+        req.userId = authData.id;
         next();
       }
     });
   } else {
     res.redirect('/login');
+    // If the token is not provided, return Forbidden
   }
 };
 
 const checkAuth = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id); // Assuming you have a User model
+    const user = await User.findById(req.userId); // Assuming you have a User model
 
     if (user) {
       res.status(200).json({ user: user }); // Send user details in the response

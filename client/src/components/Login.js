@@ -1,13 +1,22 @@
 // src/components/Login.js
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './Login.css';
+import Dashboard from './Dashboard';
 
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,14 +25,35 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const url = 'http://localhost:5050/api/auth/login';
+    
+    // Fetch options
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    };
+      
     try {
-      const response = await axios.post('http://localhost:5050/api/auth/login', formData, { withCredentials: true });
-      console.log('Login successful:', response.data);
-      navigate('/dashboard');
-    } catch (error) {
-      console.error('Login failed:', error.response.data.errors);
-      setError('Invalid email or password');
-    }
+      // Fetch request
+      const response = await fetch(url, options);
+      const {token} = await response.json();
+        // Check if response is ok (status in the range 200-299)
+        if (! token) {
+          console.log('Network response was not ok');
+          setError('Login failed. Please check your information and try again.');
+        }
+        else {
+          localStorage.setItem('token', token);
+          navigate('/');
+        }
+    } catch(error) {
+        // Handle errors
+        console.error('There was a problem with the fetch operation:', error);
+        setError('Login failed. Please check your information and try again.');
+    };
   };
 
   return (

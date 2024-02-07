@@ -1,24 +1,19 @@
 // src/components/Logout.js
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const logout = async () => {
-      try {
-        await axios.get('http://localhost:5050/api/auth/logout', { withCredentials: true });
-        // Clear any local user authentication state (if applicable)
-        // Redirect the user to the login page or another appropriate page
-        navigate('/login');
-      } catch (error) {
-        console.error('Logout failed:', error.message);
-      }
+    try {
+      localStorage.clear();
+      navigate('/login');
+    } catch(error) {
+        // Handle errors
+        console.error('There was a problem with the fetch operation:', error);
+        setError('Login failed. Please check your information and try again.');
     };
-
-    logout();
   }, [navigate]);
 
   return (

@@ -21,6 +21,7 @@ module.exports = env => {
       publicPath: "/",
       clean: !isDevelopment && { keep: /\.ico$/i }
     },
+    devtool: "source-map",
     externalsPresets: {
       web: true,
     },
@@ -67,7 +68,7 @@ module.exports = env => {
       ],
     },
     devServer: {
-      port: 3000,
+      port: 3001,
       hot: true,
       historyApiFallback: true,
       allowedHosts: "all",
