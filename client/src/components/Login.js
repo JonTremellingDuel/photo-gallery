@@ -3,6 +3,7 @@ import React, { useState, useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { storeToken } from '../actions';
+import DataService from '../services/DataService';
 
 const Login = ({ storeToken, token }) => {
   const navigate = useNavigate();
@@ -15,22 +16,14 @@ const Login = ({ storeToken, token }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const url = 'http://localhost:5050/api/auth/login';
-    
-    // Fetch options
-    const options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    };
       
     try {
       // Fetch request
-      const response = await fetch(url, options);
-      const {token} = await response.json();
+        const {token} = await DataService
+          .POST('/api/auth/login', {
+              body: JSON.stringify(formData)
+            },
+          );
         // Check if response is ok (status in the range 200-299)
         if (! token) {
           console.log('Network response was not ok');

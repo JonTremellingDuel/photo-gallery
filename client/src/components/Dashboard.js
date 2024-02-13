@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import DataService from '../services/DataService';
 import './Dashboard.css';
 
 const Dashboard = ({ token }) => {
@@ -11,24 +12,17 @@ const Dashboard = ({ token }) => {
 
   useEffect(() => {
     async function fetchUser() {
-      const url = 'http://localhost:5050/api/auth/check-auth';
-      // Fetch options
-      const options = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': `bearer ${token}`,
-        },
-      };
-
       try {
         // Fetch request
-        const response = await fetch(url, options);
+        const response = await DataService
+          .GET('/api/auth/check-auth', {
+            'authorization': `bearer ${token}`,
+          });
+
         if (response.status === 403) {
           navigate('/login');
         }
-        const json = await response.json();
-        setUser(json.user);
+        setUser(response.user);
       } catch(error) {
           // Handle errors
           console.error('There was a problem with the fetch operation:', error);
