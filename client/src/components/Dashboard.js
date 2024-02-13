@@ -39,20 +39,26 @@ const Dashboard = ({ token }) => {
   }, []);
 
   return (
-    <div className="dashboard-container">
-      {user ? (
-        <div className="dashboard-content">
-          <h1>Welcome to the Dashboard</h1>
-          <p className="user-greeting">Hello, {user.username}!</p>
-          <p className="user-email">Email: {user.email}</p>
-          <p>This is a protected area.</p>
-          <Link to="/logout" className="logout-link">
-            Logout
-          </Link>
+    <div class="container mt-2">
+      <div class="row justify-center">
+        <div class="col-12-xs col-10-sm col-5-xl">
+          <div class="container">
+            {user ? (
+              <div className="dashboard-content">
+                <h1>Welcome to the Dashboard</h1>
+                <p>Hello, {user.username}!</p>
+                <p>Email: {user.email}</p>
+                <p>This is a protected area.</p>
+                <Link to="/logout" className="logout-link">
+                  Logout
+                </Link>
+              </div>
+            ) : (
+              <p>Loading...</p>
+            )}
+          </div>
         </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+      </div>
     </div>
   );
 };

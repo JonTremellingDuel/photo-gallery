@@ -1,11 +1,4 @@
-/* src/components/Dashboard.css */
-.dashboard-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f8f9fa;
-  }
+
   
   .dashboard-content {
     max-width: 600px;
@@ -16,15 +9,6 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: #fff;
     text-align: center;
-  }
-  
-  .user-greeting {
-    font-size: 24px;
-    color: #007bff;
-  }
-  
-  .user-email {
-    color: #333;
   }
   
   .logout-link {

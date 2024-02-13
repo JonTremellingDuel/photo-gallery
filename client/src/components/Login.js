@@ -3,18 +3,11 @@ import React, { useState, useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { storeToken } from '../actions';
-import './Login.css';
 
 const Login = ({ storeToken, token }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (token) {
-      navigate('/dashboard');
-    }
-  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -44,8 +37,6 @@ const Login = ({ storeToken, token }) => {
           setError('Login failed. Please check your information and try again.');
         }
         else {
-          console.log(token)
-          localStorage.setItem('token', token);
           storeToken(token);
           navigate('/');
         }
@@ -57,37 +48,48 @@ const Login = ({ storeToken, token }) => {
   };
 
   return (
-    <div className="login-container">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit} className="login-form">
-        <div className="form-group">
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+    <div>
+      <div class="text-white bg-error p-2 br-xs">
+        <div class="container text-center">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores, perspiciatis!</p>
         </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+      </div>
+      <div class="container mt-2">
+        <div class="row justify-center">
+          <div class="col-12-xs col-10-sm col-5-xl">
+            <div class="container">
+              <div class="form centered-fields">
+                <form onSubmit={handleSubmit}>
+                  <input 
+                    type="email"
+                    name="email"
+                    placeholder="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required />
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder='password'
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <button type="submit" class="btn-primary text-white">
+                    Login
+                  </button>
+                  <p class="pt-1">
+                    Don't have an account? 
+                    <span class="pl-1 text-primary text-hover-orange-light-1">
+                      <Link to="/signup">Sign up here</Link>
+                    </span>
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-        <button type="submit" className="login-button">
-          Login
-        </button>
-      </form>
-      {error && <p className="error-message">{error}</p>}
-      <p>
-        Don't have an account? <Link to="/signup">Sign up here</Link>
-      </p>
+      </div>
     </div>
   );
 };
