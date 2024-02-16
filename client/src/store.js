@@ -8,7 +8,9 @@ const loadState = () => {
     if (serializedState === null) {
       return undefined;
     }
-    return JSON.parse(serializedState);
+    return {
+      persisted: JSON.parse(serializedState)
+    }
   } catch (err) {
     return undefined;
   }
@@ -31,9 +33,7 @@ const store = createStore(
 );
 
 store.subscribe(() => {
-  saveState({
-    counter: store.getState().counter
-  });
+  saveState(store.getState().persisted);
 });
 
 export default store;

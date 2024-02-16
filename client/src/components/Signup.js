@@ -16,13 +16,12 @@ const Signup = ({ token }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await DataService
+    await DataService
       .POST('/api/auth/signup', {
         body: JSON.stringify(formData)
       },
     );
 
-    console.log(response)
     navigate('/');
   };
 
@@ -74,7 +73,7 @@ const Signup = ({ token }) => {
 };
 
 const mapStateToProps = (state) => ({
-  token: state.counter.token
+  token: state.persisted.token
 });
 
 export default connect(mapStateToProps, {})(Signup);

@@ -17,8 +17,10 @@ const ProtectedRoute = ({ token, children }) => {
     return children;
   };
   
-  const mapStateToProps = (state) => ({
-    token: state.counter.token
-  });
+  const mapStateToProps = (state) => {
+    console.log(state);
+    return {
+      token: state.persisted.token
+    }};
   
   export default connect(mapStateToProps, {})(ProtectedRoute);

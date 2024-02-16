@@ -12,21 +12,20 @@ const Dashboard = ({ token }) => {
 
   useEffect(() => {
     async function fetchUser() {
-      try {
-        // Fetch request
-        const response = await DataService
-          .GET('/api/auth/check-auth', {
-            'authorization': `bearer ${token}`,
-          });
+      // Fetch request
+      const {code, error, body} = await DataService
+        .GET('/api/auth/check-auth', {
+          'authorization': `bearer ${token}`,
+        });
 
-        if (response.status === 403) {
-          navigate('/login');
-        }
-        setUser(response.user);
-      } catch(error) {
-          // Handle errors
-          console.error('There was a problem with the fetch operation:', error);
-      };
+      if (code === 403) {
+        navigate('/login');
+      }
+
+      if (error) {
+        console.log(error);
+      }
+      setUser(body?.user);
     }
 
     fetchUser()
@@ -58,7 +57,7 @@ const Dashboard = ({ token }) => {
 };
 
 const mapStateToProps = (state) => ({
-  token: state.counter.token
+  token: state.persisted.token
 });
 
 export default connect(mapStateToProps, {})(Dashboard);

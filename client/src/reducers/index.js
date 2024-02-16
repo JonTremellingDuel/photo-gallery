@@ -1,9 +1,11 @@
 // reducers/index.js
 import { combineReducers } from 'redux';
-import counterReducer from './counterReducer';
+import persistedReducer from './persistedReducer';
+import throwawayReducer from './throwawayReducer';
 
 const rootReducer = combineReducers({
-  counter: counterReducer
+  persisted: persistedReducer,
+  throwaway: throwawayReducer
 });
 
 export default rootReducer;

@@ -25,7 +25,7 @@ const Logout = ({clearToken}) => {
 };
 
 const mapStateToProps = (state) => ({
-  token: state.counter.token
+  token: state.persisted.token
 });
 
 const mapDispatchToProps = {

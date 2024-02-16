@@ -7,6 +7,7 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Logout from './components/Logout';
+import Error from './components/Error';
 import ProtectedRoute from './components/ProtectedRoute';
 import './scss/index.scss'
 
@@ -23,6 +24,7 @@ const App = () => {
         </div>
       </nav>
       <Provider store={store}>
+        <Error></Error>
         <Router>
           <Routes>
             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

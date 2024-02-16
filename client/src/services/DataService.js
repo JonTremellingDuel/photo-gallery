@@ -1,5 +1,33 @@
 const apiURL = 'http://localhost:5050';
 
+const callApi = async (url, options) => {
+    const result = {};
+    try {
+        // Fetch request
+        const response = await fetch(url, options);
+        result.code = response.status;
+
+        switch(response.status) {
+            case 200:
+            case 201:
+                result.body = await response.json();
+                break;
+            case 400:
+            case 500:
+                result.error = 'Something went wrong with your request';
+                break;
+            case 401:
+                result.error = 'You are not permitted to perform this action';
+                break;
+        }
+    } catch(error) {
+        // Handle errors
+        result.error = error;
+    };
+    
+    return result;
+}
+
 const DataService = {
 
     GET: async (endpoint, headers={}) => {
@@ -13,15 +41,7 @@ const DataService = {
         
         const url = `${apiURL}${endpoint}`;
 
-        console.log(options)
-        try {
-            // Fetch request
-            const response = await fetch(url, options);
-            return response.json();
-        } catch(error) {
-            // Handle errors
-            return error;
-        };
+        return callApi(url, options);
     },
 
     POST: async (endpoint, {headers={}, body={}}) => {
@@ -36,15 +56,7 @@ const DataService = {
         
         const url = `${apiURL}${endpoint}`;
 
-        console.log(options)
-        try {
-            // Fetch request
-            const response = await fetch(url, options);
-            return response.json();
-        } catch(error) {
-            // Handle errors
-            return error;
-        };
+        return callApi(url, options);
     }
 }
 
