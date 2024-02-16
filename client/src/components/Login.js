@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { storeToken, setError } from '../actions';
 import DataService from '../services/DataService';
-import FadeInOut from "./FadeInOut";
+import Error from './Error';
 
 const Login = ({ storeToken, setError }) => {
   const navigate = useNavigate();
@@ -23,15 +23,6 @@ const Login = ({ storeToken, setError }) => {
         },
       );
 
-    if (! body?.token) {
-      console.log('Network response was not ok');
-      setError('Login failed. Please check your information and try again.');
-    }
-    else {
-      storeToken(body?.token);
-      navigate('/');
-    }
-
     if (error) {
       if ([400, 500].includes(code)) {
         setError('Incorrect login details');
@@ -39,7 +30,11 @@ const Login = ({ storeToken, setError }) => {
       else {
         setError(error);
       }
-    };
+    }
+    else {
+      storeToken(body?.token);
+      navigate('/');
+    }
   };
 
   return (
@@ -78,6 +73,7 @@ const Login = ({ storeToken, setError }) => {
           </div>
         </div>
       </div>
+      <Error></Error>
     </div>
   );
 };

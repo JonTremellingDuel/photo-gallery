@@ -1,31 +1,36 @@
 // src/components/Login.js
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
-import FadeInOut from "./FadeInOut";
+import { useNotifications } from './notifications/NotificationsContext';
 import { clearError } from '../actions';
 
 const Error = ({ error, clearError }) => {
-
-    const [visible, setVisible] = useState(false);
+    const { notifications, addNotification, removeNotification } = useNotifications();
 
     useEffect(() => {
-        setVisible(error ? true : false);
-        setTimeout(() => {
-            setVisible(false)
-        }, 10000)
+        if (error) {
+            addNotification({
+                id: Date.now(),
+                message: error,
+                type: 'error',
+            });
 
-        setTimeout(() => {
             clearError();
-        }, 15000)
+        }
     },[error])
 
-  return (
-    <FadeInOut show={visible} duration={1000}>
-        <div class="text-white bg-error p-1">
-            {error}
+    return (
+        <div className="notifications-container">
+            {notifications.map((notification) => (
+                <div key={notification.id} className={`notification ${notification.type}`}>
+                    <button className="close-button" onClick={() => removeNotification(notification.id)}>
+                    &times;
+                    </button>
+                    <div className="notification-content">{notification.message}</div>
+                </div>
+            ))}
         </div>
-    </FadeInOut>
-  );
+    )
 };
 
 const mapStateToProps = (state) => ({

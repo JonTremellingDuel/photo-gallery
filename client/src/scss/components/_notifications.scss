@@ -1,0 +1,43 @@
+// Notifications.scss
+
+.notifications-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+  }
+  
+  .notification {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    color: #333;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .notification.info {
+    background-color: $info;
+    color: #fff;
+  }
+
+  .notification.error {
+    background-color: $error;
+    color: #fff;
+  }
+  
+  .close-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: auto;
+  }
+  
+  .notification-content {
+    margin-left: 10px;
+  }
+  

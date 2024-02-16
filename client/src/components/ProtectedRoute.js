@@ -18,7 +18,6 @@ const ProtectedRoute = ({ token, children }) => {
   };
   
   const mapStateToProps = (state) => {
-    console.log(state);
     return {
       token: state.persisted.token
     }};

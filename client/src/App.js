@@ -9,6 +9,8 @@ import Dashboard from './components/Dashboard';
 import Logout from './components/Logout';
 import Error from './components/Error';
 import ProtectedRoute from './components/ProtectedRoute';
+import { NotificationsProvider } from './components/notifications/NotificationsContext';
+import Notifications from './components/notifications/Notifications';
 import './scss/index.scss'
 
 const App = () => {
@@ -24,16 +26,18 @@ const App = () => {
         </div>
       </nav>
       <Provider store={store}>
-        <Error></Error>
-        <Router>
-          <Routes>
-            <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/signup" element={<ProtectedRoute><Signup /></ProtectedRoute>} />
-            <Route path="/login" element={<ProtectedRoute><Login /></ProtectedRoute>} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Router>
+        <NotificationsProvider>
+          <Notifications />
+          <Router>
+            <Routes>
+              <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/signup" element={<ProtectedRoute><Signup /></ProtectedRoute>} />
+              <Route path="/login" element={<ProtectedRoute><Login /></ProtectedRoute>} />
+              <Route path="/logout" element={<Logout />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </Router>
+        </NotificationsProvider>
       </Provider>
     </div>
   );
