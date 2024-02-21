@@ -9,7 +9,7 @@ module.exports = env => {
 
   /** @type {import("webpack").Configuration} */
   return ({
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     mode: isDevelopment 
       ? "development"
       : "production",
@@ -51,6 +51,11 @@ module.exports = env => {
     ],
     module: {
       rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
         {
           test: /\.(?:[tj]sx?|json)$/,
           exclude: /node_modules/,
