@@ -52,16 +52,19 @@ module.exports = env => {
     module: {
       rules: [
         {
-          test: /\.tsx?$/,
+          test: /\.(ts|tsx)$/,
           use: 'ts-loader',
           exclude: /node_modules/,
         },
         {
-          test: /\.(?:[tj]sx?|json)$/,
+          test: /\.jsx?$/,
+          use: 'ts-loader', // Use ts-loader for JS and JSX files
           exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-          },
+        },
+        {
+          test: /\.json$/,
+          loader: 'json-loader', // Use json-loader for JSON files
+          type: 'javascript/auto', // Specify the type
         },
         {
           test: /\.css$/,

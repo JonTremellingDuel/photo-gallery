@@ -1,6 +1,7 @@
-// store.js
 import { createStore } from 'redux';
 import rootReducer from './reducers';
+
+export interface stateSchema { persisted?: { token: any; }; throwaway?: { error: any; }; };
 
 const loadState = () => {
   try {
@@ -16,9 +17,9 @@ const loadState = () => {
   }
 };
 
-const saveState = (state) => {
+const saveState = (state: stateSchema) => {
   try {
-    const serializedState = JSON.stringify(state);
+    const serializedState = JSON.stringify(state.persisted);
     localStorage.setItem('state', serializedState);
   } catch (err) {
     // Ignore write errors
@@ -33,7 +34,9 @@ const store = createStore(
 );
 
 store.subscribe(() => {
-  saveState(store.getState().persisted);
+  saveState({
+    persisted: store.getState().persisted
+  });
 });
 
 export default store;

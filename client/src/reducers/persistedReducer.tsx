@@ -1,8 +1,8 @@
 const initialState = {
-  token: parseInt(localStorage.getItem('token')) || '',
+  token: localStorage.getItem('token') || '',
 };
   
-const persistedReducer = (state = initialState, action) => {
+const persistedReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case 'STORE_TOKEN':
       localStorage.setItem('token', action.payload);

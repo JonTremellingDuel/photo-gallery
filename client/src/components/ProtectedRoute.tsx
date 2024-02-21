@@ -1,9 +1,15 @@
 // ProtectedRoute.js
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { stateSchema } from 'store';
 
-const ProtectedRoute = ({ token, children }) => {
+interface ProtectedRouteProps {
+  token: string,
+  children: any
+}
+
+const ProtectedRoute: React.FC<PropsWithChildren<ProtectedRouteProps>> = ({token, children}) => {
     const location = useLocation().pathname.slice(1);
     const notLoggedIn = ['login', 'signup'].includes(location);
     if (! token && ! notLoggedIn) {
@@ -17,9 +23,9 @@ const ProtectedRoute = ({ token, children }) => {
     return children;
   };
   
-  const mapStateToProps = (state) => {
+  const mapStateToProps = (state: stateSchema) => {
     return {
-      token: state.persisted.token
+      token: state.persisted?.token
     }};
   
   export default connect(mapStateToProps, {})(ProtectedRoute);

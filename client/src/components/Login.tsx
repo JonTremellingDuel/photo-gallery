@@ -1,20 +1,26 @@
 // src/components/Login.js
-import React, { useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { storeToken, setError } from '../actions';
 import DataService from '../services/DataService';
 import Error from './Error';
+import { stateSchema } from 'store';
 
-const Login = ({ storeToken, setError }) => {
+interface LoginProps {
+  storeToken: any,
+  setError: any
+}
+
+const Login: React.FC<LoginProps> = ({storeToken, setError}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
       
     const {code, error, body} = await DataService
@@ -38,11 +44,11 @@ const Login = ({ storeToken, setError }) => {
   };
 
   return (
-    <div class="container mt-2">
-      <div class="row justify-center">
-        <div class="col-12-xs col-10-sm col-5-xl">
-          <div class="container">
-            <div class="form centered-fields">
+    <div className="container mt-2">
+      <div className="row justify-center">
+        <div className="col-12-xs col-10-sm col-5-xl">
+          <div className="container">
+            <div className="form centered-fields">
               <form onSubmit={handleSubmit}>
                 <input 
                   type="email"
@@ -59,12 +65,12 @@ const Login = ({ storeToken, setError }) => {
                   onChange={handleChange}
                   required
                 />
-                <button type="submit" class="btn-primary text-white">
+                <button type="submit" className="btn-primary text-white">
                   Login
                 </button>
-                <p class="pt-1">
+                <p className="pt-1">
                   Don't have an account? 
-                  <span class="pl-1 text-primary text-hover-orange-light-1">
+                  <span className="pl-1 text-primary text-hover-orange-light-1">
                     <Link to="/signup">Sign up here</Link>
                   </span>
                 </p>
@@ -73,13 +79,13 @@ const Login = ({ storeToken, setError }) => {
           </div>
         </div>
       </div>
-      <Error></Error>
+      <Error />
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  token: state.persisted.token
+const mapStateToProps = (state: stateSchema) => ({
+  token: state.persisted?.token
 });
 
 const mapDispatchToProps = {

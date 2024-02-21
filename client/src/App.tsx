@@ -16,12 +16,12 @@ import './scss/index.scss'
 const App = () => {
   return (
     <div>
-      <nav class="navbar justify-between">
-        <div class="container">
-          <h1 class="site-title">Photo Gallery</h1>
-          <ul class="display-f">
-            <li class="ml-1 text-hover-secondary"><a href="#work">Our Work</a></li>
-            <li class="ml-1 text-hover-secondary"><a href="#about">About Us</a></li>
+      <nav className="navbar justify-between">
+        <div className="container">
+          <h1 className="site-title">Photo Gallery</h1>
+          <ul className="display-f">
+            <li className="ml-1 text-hover-secondary"><a href="#work">Our Work</a></li>
+            <li className="ml-1 text-hover-secondary"><a href="#about">About Us</a></li>
           </ul>
         </div>
       </nav>

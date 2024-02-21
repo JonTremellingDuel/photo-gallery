@@ -1,7 +1,7 @@
 const apiURL = 'http://localhost:5050';
 
-const callApi = async (url, options) => {
-    const result = {};
+const callApi = async (url: string, options: any) => {
+    const result: any = {};
     try {
         // Fetch request
         const response = await fetch(url, options);
@@ -30,7 +30,7 @@ const callApi = async (url, options) => {
 
 const DataService = {
 
-    GET: async (endpoint, headers={}) => {
+    GET: async (endpoint: string, headers={}) => {
         const options = {
               method: 'GET',
               headers: {
@@ -44,7 +44,7 @@ const DataService = {
         return callApi(url, options);
     },
 
-    POST: async (endpoint, {headers={}, body={}}) => {
+    POST: async (endpoint: string, {headers={}, body={}}) => {
         const options = {
               method: 'POST',
               headers: {

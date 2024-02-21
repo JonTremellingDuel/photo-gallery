@@ -5,10 +5,15 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import DataService from '../services/DataService';
 import './Dashboard.css';
+import { stateSchema } from '../store'
 
-const Dashboard = ({ token }) => {
+interface DashboardProps {
+  token: string;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ token }) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     async function fetchUser() {
@@ -32,10 +37,10 @@ const Dashboard = ({ token }) => {
   }, []);
 
   return (
-    <div class="container mt-2">
-      <div class="row justify-center">
-        <div class="col-12-xs col-10-sm col-5-xl">
-          <div class="container">
+    <div className="container mt-2">
+      <div className="row justify-center">
+        <div className="col-12-xs col-10-sm col-5-xl">
+          <div className="container">
             {user ? (
               <div className="dashboard-content">
                 <h1>Welcome to the Dashboard</h1>
@@ -56,8 +61,8 @@ const Dashboard = ({ token }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  token: state.persisted.token
+const mapStateToProps = (state: stateSchema) => ({
+  token: state.persisted?.token
 });
 
 export default connect(mapStateToProps, {})(Dashboard);

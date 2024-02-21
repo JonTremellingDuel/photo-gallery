@@ -3,8 +3,13 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { clearToken } from '../actions';
+import { stateSchema } from 'store';
 
-const Logout = ({clearToken}) => {
+interface LogoutProps {
+  clearToken: any,
+}
+
+const Logout: React.FC<LogoutProps> = ({clearToken}) => {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,8 +29,8 @@ const Logout = ({clearToken}) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  token: state.persisted.token
+const mapStateToProps = (state: stateSchema) => ({
+  token: state.persisted?.token
 });
 
 const mapDispatchToProps = {
