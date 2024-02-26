@@ -1,4 +1,3 @@
-// src/components/Login.js
 import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import { useNotifications } from './notifications/NotificationsContext';
@@ -7,7 +6,7 @@ import { stateSchema } from 'store';
 
 interface ErrorProps {
     error: string,
-    clearError: any
+    clearError: () => void
 }
   
 const Error: React.FC<ErrorProps> = ({error, clearError}) => {
@@ -27,7 +26,7 @@ const Error: React.FC<ErrorProps> = ({error, clearError}) => {
 
     return (
         <div className="notifications-container">
-            {notifications.map((notification: {id: string, type: string, message: string}) => (
+            {notifications && notifications.map((notification: {id: number, type: string, message: string}) => (
                 <div key={notification.id} className={`notification ${notification.type}`}>
                     <button className="close-button" onClick={() => removeNotification(notification.id)}>
                     &times;

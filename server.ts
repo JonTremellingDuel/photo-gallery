@@ -1,5 +1,5 @@
 // server.js
-const express = require('express');
+import express from "./common";
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -24,7 +24,7 @@ mongoose.connect('mongodb://localhost:27017/photo-gallery', {
   useUnifiedTopology: true,
 });
 
-app.post('/api/endpoint', (req, res) => {
+app.post('/api/endpoint', (req: any, res: any) => {
   // Log the received JSON data
   console.log('Received JSON data:', req.body);
 

@@ -1,4 +1,3 @@
-// src/components/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -11,9 +10,16 @@ interface DashboardProps {
   token: string;
 }
 
+interface UserSchema {
+  id: string,
+  email: string,
+  password: string
+  username: string
+}
+
 const Dashboard: React.FC<DashboardProps> = ({ token }) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<UserSchema>();
 
   useEffect(() => {
     async function fetchUser() {
@@ -30,6 +36,7 @@ const Dashboard: React.FC<DashboardProps> = ({ token }) => {
       if (error) {
         console.log(error);
       }
+      
       setUser(body?.user);
     }
 

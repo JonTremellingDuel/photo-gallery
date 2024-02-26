@@ -1,23 +1,26 @@
-// NotificationsContext.js
 import React, { createContext, PropsWithChildren, useState, useContext, useEffect } from 'react';
+import { NotificationSchema } from './Notifications';
 
-interface notificationsContextSchema {
-  notifications?: any,
-  notification?: any,
-  addNotification?: any,
-  removeNotification?: any,
-  clearNotifications?: any
+interface ContextSchema {
+  notifications?: Array<NotificationSchema>,
+  notification?: NotificationSchema,
+  addNotification: (notification: NotificationSchema) => void,
+  removeNotification: (id: number) => void,
+  clearNotifications: () => void
 };
 
-const NotificationsContext = createContext<notificationsContextSchema>({
-  notification: {},
+const NotificationsContext = createContext<ContextSchema>({
+  addNotification: () => {},
+  removeNotification: () => {},
+  clearNotifications: () => {}
 });
 
 export const NotificationsProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
-  const [notifications, setNotifications] = useState<any>([]);
 
-  const addNotification = (notification: {id: string, type: string, message: string }) => {
-    setNotifications((prevNotifications: any) => [...prevNotifications, notification]);
+  const [notifications, setNotifications] = useState<NotificationSchema[]>([]);
+
+  const addNotification = (notification: {id: number, type: string, message: string }) => {
+    setNotifications((prevNotifications: Array<NotificationSchema>) => [...prevNotifications, notification]);
 
     // Remove the notification after 3 seconds
     setTimeout(() => {
@@ -25,9 +28,9 @@ export const NotificationsProvider: React.FC<PropsWithChildren<{}>> = ({ childre
     }, 3000);
   };
 
-  const removeNotification = (id: string) => {
-    setNotifications((prevNotifications: any) =>
-      prevNotifications.filter((notification: {id: string, type: string, message: string }) => notification.id !== id)
+  const removeNotification = (id: number) => {
+    setNotifications((prevNotifications: Array<NotificationSchema>) =>
+      prevNotifications.filter((notification: {id: number, type: string, message: string }) => notification.id !== id)
     );
   };
 

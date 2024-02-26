@@ -1,13 +1,17 @@
-// controllers/authController.js
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+import { Request, Response, NextFunction } from 'express';
+import User from '../models/User'; // Assuming the path to the User model
+import * as jwt from 'jsonwebtoken';
 
-const handleErrors = (err) => {
-  // Handle validation errors
-  let errors = { email: '', password: '' };
+interface ErrorProperties {
+  path: string;
+  message: string;
+}
+
+const handleErrors = (err: any) => {
+  let errors: Record<string, string> = { email: '', password: '' };
 
   if (err.message.includes('user validation failed')) {
-    Object.values(err.errors).forEach(({ properties }) => {
+    Object.values(err.errors).forEach(({ properties }: any) => {
       errors[properties.path] = properties.message;
     });
   }
@@ -17,13 +21,13 @@ const handleErrors = (err) => {
 
 const maxAge = 3 * 24 * 60 * 60; // 3 days
 
-const createToken = (id) => {
+const createToken = (id: string) => {
   return jwt.sign({ id }, 'your-secret-key', {
     expiresIn: maxAge,
   });
 };
 
-const signup = async (req, res) => {
+export const signup = async (req: Request, res: Response) => {
   try {
     const user = await User.create(req.body);
     const token = createToken(user._id);
@@ -37,68 +41,62 @@ const signup = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
+export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.login(email, password);
-    const token = createToken(user._id);
-    res.status(201).json({ 
-      user: user._id,
-      token,
-    });
+    if (user) {
+      const token = createToken(user._id);
+      res.status(201).json({ 
+        user: user._id,
+        token,
+      });
+    } else {
+      throw new Error('User not found');
+    }
   } catch (err) {
     const errors = handleErrors(err);
     res.status(400).json({ errors });
   }
 };
 
-const logout = (req, res) => {
+export const logout = (req: Request, res: Response) => {
   res.cookie('jwt', '', { maxAge: 1, httpOnly: true });
 
   res.status(200).json({ message: 'Logout successful' });
 };
 
-const requireAuth = (req, res, next) => {
-  // Get the auth header value (bearer token)
+export const requireAuth = (req: any, res: Response, next: NextFunction) => {
   const bearerHeader = req.headers['authorization'];
 
   if (typeof bearerHeader !== 'undefined') {
-    // Split the header value to get the token
     const bearerToken = bearerHeader.split(' ')[1];
-
-    // Set the token in the request object
     req.token = bearerToken;
 
-    // Verify the token
-    jwt.verify(bearerToken, 'your-secret-key', (err, authData) => {
+    jwt.verify(bearerToken, 'your-secret-key', (err: any, authData: any) => {
       if (err) {
         res.status(403).json({ message: 'Forbidden' });
       } else {
-        // Set the user ID in the request object
-        req.userId = authData.id;
+        req.userId = (authData as { id: string }).id;
         next();
       }
     });
   } else {
-    // If the token is not provided, return Forbidden
     res.status(403).json({ message: 'Forbidden' });
   }
 };
 
-const checkAuth = async (req, res) => {
+export const checkAuth = async (req: any, res: Response) => {
   try {
-    const user = await User.findById(req.userId); // Assuming you have a User model
-
+    const user = await User.findById(req.userId);
     if (user) {
-      res.status(200).json({ user: user }); // Send user details in the response
+      res.status(200).json({ user: user });
     } else {
       res.status(404).json({ error: 'User not found' });
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching user details:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-module.exports = { signup, login, logout, requireAuth, checkAuth };
