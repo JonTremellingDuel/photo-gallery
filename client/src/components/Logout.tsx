@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { clearToken } from '../actions';
-import { stateSchema } from 'store';
+import { stateSchema } from '../store';
 
 interface LogoutProps {
   clearToken: any,

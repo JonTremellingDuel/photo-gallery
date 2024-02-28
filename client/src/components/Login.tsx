@@ -1,20 +1,24 @@
-// src/components/Login.js
 import React, {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { storeToken, setError } from '../actions';
 import DataService from '../services/DataService';
 import Error from './Error';
-import { stateSchema } from 'store';
+import { stateSchema } from '../store';
 
 interface LoginProps {
-  storeToken: any,
-  setError: any
+  storeToken: (token: string) => {},
+  setError: (error: string) => {}
+}
+
+interface LoginSchema {
+  email: string,
+  password: string
 }
 
 const Login: React.FC<LoginProps> = ({storeToken, setError}) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState<LoginSchema>({ email: '', password: '' });
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

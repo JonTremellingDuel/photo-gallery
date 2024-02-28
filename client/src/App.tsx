@@ -7,7 +7,6 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Logout from './components/Logout';
-import Error from './components/Error';
 import ProtectedRoute from './components/ProtectedRoute';
 import { NotificationsProvider } from './components/notifications/NotificationsContext';
 import Notifications from './components/notifications/Notifications';

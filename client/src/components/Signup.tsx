@@ -1,9 +1,7 @@
 // src/components/Signup.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { connect } from 'react-redux';
 import DataService from '../services/DataService';
-import { stateSchema } from 'store';
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();

@@ -1,0 +1,1 @@
+openssl req -nodes -new -x509 -keyout ./dist/server.key -out ./dist/server.cert -days 365

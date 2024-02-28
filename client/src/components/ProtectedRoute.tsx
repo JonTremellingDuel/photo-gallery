@@ -2,7 +2,7 @@
 import React, { PropsWithChildren } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { stateSchema } from 'store';
+import { stateSchema } from '../store';
 
 interface ProtectedRouteProps {
   token: string,
