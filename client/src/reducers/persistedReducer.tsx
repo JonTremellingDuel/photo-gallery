@@ -1,8 +1,13 @@
+interface Action {
+  type: string,
+  payload: string,
+}
+
 const initialState = {
   token: localStorage.getItem('token') || '',
 };
   
-const persistedReducer = (state = initialState, action: any) => {
+const persistedReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case 'STORE_TOKEN':
       localStorage.setItem('token', action.payload);

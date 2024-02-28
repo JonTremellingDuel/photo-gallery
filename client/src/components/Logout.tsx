@@ -6,7 +6,7 @@ import { clearToken } from '../actions';
 import { stateSchema } from '../store';
 
 interface LogoutProps {
-  clearToken: any,
+  clearToken: () => {},
 }
 
 const Logout: React.FC<LogoutProps> = ({clearToken}) => {
