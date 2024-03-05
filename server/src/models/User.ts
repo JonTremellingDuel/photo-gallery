@@ -3,8 +3,12 @@ import { isEmail } from 'validator';
 import * as bcrypt from 'bcrypt';
 
 interface UserDocument extends Document {
+  googleId: string,
   email: string;
   password: string;
+  displayName: string,
+  fname: string,
+  sname: string
 }
 
 interface UserModel extends Model<UserDocument> {
@@ -12,6 +16,7 @@ interface UserModel extends Model<UserDocument> {
 }
 
 const userSchema = new mongoose.Schema<UserDocument>({
+  googleId: String,
   email: {
     type: String,
     required: [true, 'Please enter an email'],
@@ -24,6 +29,9 @@ const userSchema = new mongoose.Schema<UserDocument>({
     required: [true, 'Please enter a password'],
     minlength: [6, 'Minimum password length is 6 characters'],
   },
+  displayName: String,
+  fname: String,
+  sname: String
 });
 
 // Hash password before saving to database

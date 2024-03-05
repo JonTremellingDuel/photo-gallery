@@ -14,7 +14,7 @@ interface UserSchema {
   id: string,
   email: string,
   password: string
-  username: string
+  displayName: string
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ token }) => {
@@ -51,7 +51,7 @@ const Dashboard: React.FC<DashboardProps> = ({ token }) => {
             {user ? (
               <div className="dashboard-content">
                 <h1>Welcome to the Dashboard</h1>
-                <p>Hello, {user.username}!</p>
+                <p>Hello, {user.displayName}!</p>
                 <p>Email: {user.email}</p>
                 <p>This is a protected area.</p>
                 <Link to="/logout" className="logout-link">

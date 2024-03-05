@@ -1,17 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
 import User from '../models/User'; // Assuming the path to the User model
-import * as jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
 interface ErrorProperties {
-  path: string;
-  message: string;
+  message: string, 
+  errors: Array<{
+      properties: {
+        path: string, 
+        message: string
+      }
+  }>
 }
 
-const handleErrors = (err: any) => {
+const handleErrors = (err: ErrorProperties) => {
   let errors: Record<string, string> = { email: '', password: '' };
 
   if (err.message.includes('user validation failed')) {
-    Object.values(err.errors).forEach(({ properties }: any) => {
+    Object.values(err.errors).forEach(({ properties }) => {
       errors[properties.path] = properties.message;
     });
   }
@@ -20,6 +25,32 @@ const handleErrors = (err: any) => {
 };
 
 const maxAge = 3 * 24 * 60 * 60; // 3 days
+
+const JWT_SECRET_KEY = 'your_secret_key';
+
+// Function to generate JWT tokens
+export const generateJWT = (user: {_id: string, email: string}) => {
+    // Create a JWT token with user data and sign it with the secret key
+    const token = jwt.sign({
+        userId: user._id, // You may use user ID or any other unique identifier
+        email: user.email
+        // Add more claims as needed
+    }, JWT_SECRET_KEY, { expiresIn: maxAge }); // Token expires in 1 hour
+
+    return token;
+}
+
+export const verifyJWT = (token: string) => {
+  try {
+      // Verify the token using the secret key
+      const decoded = jwt.verify(token, JWT_SECRET_KEY);
+      // If the token is valid, return the decoded payload
+      return decoded;
+  } catch (error) {
+      // If the token is invalid or expired, throw an error
+      throw new Error('Invalid or expired token');
+  }
+}
 
 const createToken = (id: string) => {
   return jwt.sign({ id }, 'your-secret-key', {
@@ -36,7 +67,7 @@ export const signup = async (req: Request, res: Response) => {
       token,
     });
   } catch (err) {
-    const errors = handleErrors(err);
+    const errors = handleErrors(err as ErrorProperties);
     res.status(400).json({ errors });
   }
 };
@@ -56,7 +87,7 @@ export const login = async (req: Request, res: Response) => {
       throw new Error('User not found');
     }
   } catch (err) {
-    const errors = handleErrors(err);
+    const errors = handleErrors(err as ErrorProperties);
     res.status(400).json({ errors });
   }
 };
@@ -74,14 +105,9 @@ export const requireAuth = (req: any, res: Response, next: NextFunction) => {
     const bearerToken = bearerHeader.split(' ')[1];
     req.token = bearerToken;
 
-    jwt.verify(bearerToken, 'your-secret-key', (err: any, authData: any) => {
-      if (err) {
-        res.status(403).json({ message: 'Forbidden' });
-      } else {
-        req.userId = (authData as { id: string }).id;
-        next();
-      }
-    });
+    const tmp = verifyJWT(bearerToken);
+    req.userId = (tmp.userId as { id: string });
+    next();
   } else {
     res.status(403).json({ message: 'Forbidden' });
   }

@@ -4,7 +4,11 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
+const googleAuth = require('./routes/googleAuth');
 const bodyParser = require('body-parser');
+
+const passport = require('passport');
+const session = require('express-session');
 
 const app = express();
 
@@ -24,15 +28,17 @@ mongoose.connect('mongodb://localhost:27017/photo-gallery', {
   useUnifiedTopology: true,
 });
 
-app.post('/api/endpoint', (req: any, res: any) => {
-  // Log the received JSON data
-  console.log('Received JSON data:', req.body);
+// Passport session setup
+app.use(session({
+    secret: 'your_secret_key',
+    resave: true,
+    saveUninitialized: true
+}));
 
-  // Send a response
-  res.status(200).json({ message: 'JSON data received successfully' });
-});
+app.use(passport.initialize());
+app.use(passport.session());
 
-// Routes
+app.use('/', googleAuth);
 app.use('/api/auth', authRoutes);
 
 // Start the server

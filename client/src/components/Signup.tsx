@@ -1,5 +1,5 @@
 // src/components/Signup.js
-import React, { useState } from 'react';
+import React, { FormEvent, ChangeEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DataService from '../services/DataService';
 
@@ -8,11 +8,11 @@ const Signup: React.FC = () => {
   const [formData, setFormData] = useState({ email: '', password: '', username: '' });
   const [error, setError] = useState('');
   
-  const handleChange = (e: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     await DataService

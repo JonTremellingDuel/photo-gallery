@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { storeToken, setError } from '../actions';
@@ -20,11 +20,11 @@ const Login: React.FC<LoginProps> = ({storeToken, setError}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<LoginSchema>({ email: '', password: '' });
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
       
     const {code, error, body} = await DataService
@@ -45,6 +45,10 @@ const Login: React.FC<LoginProps> = ({storeToken, setError}) => {
       storeToken(body?.token);
       navigate('/');
     }
+  };
+
+  const handleLogin = () => {
+    window.location.href = 'http://localhost:5050/auth/google';
   };
 
   return (
@@ -72,6 +76,7 @@ const Login: React.FC<LoginProps> = ({storeToken, setError}) => {
                 <button type="submit" className="btn-primary text-white">
                   Login
                 </button>
+                <button onClick={handleLogin}>Login with Google</button>
                 <p className="pt-1">
                   Don't have an account? 
                   <span className="pl-1 text-primary text-hover-orange-light-1">
