@@ -41,27 +41,19 @@ export const generateJWT = (user: {_id: string, email: string}) => {
 }
 
 export const verifyJWT = (token: string) => {
-  try {
-      // Verify the token using the secret key
-      const decoded = jwt.verify(token, JWT_SECRET_KEY);
-      // If the token is valid, return the decoded payload
-      return decoded;
-  } catch (error) {
-      // If the token is invalid or expired, throw an error
-      throw new Error('Invalid or expired token');
-  }
+  // Verify the token using the secret key
+  const decoded = jwt.verify(token, JWT_SECRET_KEY);
+  // If the token is valid, return the decoded payload
+  return decoded;
 }
-
-const createToken = (id: string) => {
-  return jwt.sign({ id }, 'your-secret-key', {
-    expiresIn: maxAge,
-  });
-};
 
 export const signup = async (req: Request, res: Response) => {
   try {
     const user = await User.create(req.body);
-    const token = createToken(user._id);
+    const token = generateJWT({
+      _id: user._id,
+      email: user.email
+    });
     res.status(201).json({ 
       user: user._id,
       token,
@@ -78,7 +70,10 @@ export const login = async (req: Request, res: Response) => {
   try {
     const user = await User.login(email, password);
     if (user) {
-      const token = createToken(user._id);
+      const token = generateJWT({
+        _id: user._id,
+        email: user.email
+      });
       res.status(201).json({ 
         user: user._id,
         token,
@@ -105,9 +100,15 @@ export const requireAuth = (req: any, res: Response, next: NextFunction) => {
     const bearerToken = bearerHeader.split(' ')[1];
     req.token = bearerToken;
 
-    const tmp = verifyJWT(bearerToken);
-    req.userId = (tmp.userId as { id: string });
-    next();
+    try {
+      const response = verifyJWT(bearerToken);
+      req.userId = (response.userId as { id: string });
+      next();
+    }
+    catch (error) {
+      res.cookie('jwt', '', { maxAge: 1, httpOnly: true });
+      return res.sendStatus(403);
+    }
   } else {
     res.status(403).json({ message: 'Forbidden' });
   }

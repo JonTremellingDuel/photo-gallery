@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { clearToken } from '../actions';
 import DataService from '../services/DataService';
 import './Dashboard.css';
 import { stateSchema } from '../store'
 
 interface DashboardProps {
   token: string;
+  clearToken: () => {},
 }
 
 interface UserSchema {
@@ -17,7 +19,7 @@ interface UserSchema {
   displayName: string
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ token }) => {
+const Dashboard: React.FC<DashboardProps> = ({ token, clearToken }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<UserSchema>();
 
@@ -30,6 +32,7 @@ const Dashboard: React.FC<DashboardProps> = ({ token }) => {
         });
 
       if (code === 403) {
+        clearToken();
         navigate('/login');
       }
 
@@ -72,4 +75,8 @@ const mapStateToProps = (state: stateSchema) => ({
   token: state.persisted?.token
 });
 
-export default connect(mapStateToProps, {})(Dashboard);
+const mapDispatchToProps = {
+  clearToken
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
